@@ -7,14 +7,14 @@ from pyrogram.errors import RPCError, UserNotParticipant
 from pyrogram.filters import create
 from pyrogram.types import CallbackQuery, Message
 
-from Alita import DEV_USERS, OWNER_ID, SUDO_USERS
+from Alita import ADMINS
 from database.disable_db import DISABLED_CMDS
 from Alita.tr_engine import tlang
 from Alita.utils.caching import ADMIN_CACHE, admin_cache_reload
 from Alita.vars import Config
 
-SUDO_LEVEL = set(SUDO_USERS + DEV_USERS + [int(OWNER_ID)])
-DEV_LEVEL = set(DEV_USERS + [int(OWNER_ID)])
+SUDO_LEVEL = set(ADMINS + [int(ADMINS)])
+DEV_LEVEL = set(ADMINS + [int(ADMINS)])
 
 
 def command(
@@ -35,15 +35,15 @@ def command(
         if any([m.forward_from_chat, m.forward_from]):
             return False
 
-        if owner_cmd and (m.from_user.id != OWNER_ID):
+        if owner_cmd and (m.from_user.id != ADMINS):
             # Only owner allowed to use this...!
             return False
 
-        if dev_cmd and (m.from_user.id not in DEV_LEVEL):
+        if dev_cmd and (m.from_user.id not in ADMINS):
             # Only devs allowed to use this...!
             return False
 
-        if sudo_cmd and (m.from_user.id not in SUDO_LEVEL):
+        if sudo_cmd and (m.from_user.id not in ADMINS):
             # Only sudos and above allowed to use it
             return False
 
